@@ -2,9 +2,9 @@ language: node_js
 node_js:
 - '6'
 before_install:
-- echo "registry = https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual" > .npmrc
-- curl -u${NPM_USER}:${NPM_PASSWORD} "https://realglobe.artifactoryonline.com/realglobe/api/npm/auth" >> .npmrc
-- cat .npmrc
+- npm i npm-cli-login -g
+- echo "NPM_USER=${NPM_USER}"
+- npm-cli-login -u "${NPM_USER}" -p "${NPM_PASSWORD}" -e "${NPM_EMAIL}"
 - npm install browserify node-sass fur -g
 install:
 - npm install
@@ -13,5 +13,8 @@ before_script:
 script:
 - ./ci/build.js
 - ./ci/test.js
-- ./ci/cover.js
-- ./ci/report.js
+after_success:
+- ./ci/travis/publish.js
+- ./ci/travis/push_sugos_index.js
+env:
+  secure: "FgRKyRLvCw6egxrkKPGAz4gLXtlcH0esqK/ChB8LG86E41yHBXS04pHmVL12xwETkVMpJ3Kyazaxpl7r0JyjT+ejT/zzp+GH0jGPzidCrB72Ywbw+A0nbfB+b9J7srHt7DFZlSMYaifiwzOptdbxVY27Niwq6zMLSVpAgurwydIpjBdSn68pYtdaurtJ9hOwpzO3mDn4MYeewbtd6l7+Sfb2p76QmA9MoZ1RqV9ggNLKjzDSKpvJ9De6Xj4yntoRrmguSl/VmRm8L5jtcXkiSaHtR0Gyryqs2V1E3JkRzByQeq3ls18zOm6QKPuCmDKwKqIvt+Jjl+EjwuDlSPOaiS5TWgJ/mPupcrdgJBnSGi86P1etrEpyeBcT5Ip1PQ+etgL0EL+sFwOketveKNl0L3yNsl66S6ZYahce4XsA5DsY4lv076dGjSHIK3GjMc72CVpH6LMUqioAkfohurM6AXLJiJsZTGMqdoVgdoEcFHrnkhpfN6q+3Ln8aZexEqhIUpd7tyiV+FVk35C+ADUhXyvCGM2TEaLhQHP2V29JafY3uqOChnqAFNOxX68o0HBDoSsP77CnZGvnBM24mXVxgVa8m2uLJaT4KXbZNN/TIQOkABrlKbHQ2awqvzeYX27PdO54ZgiuBrkQBxJHSw006/TJwf2GVROGpJOwAGMCHUA="
